@@ -123,9 +123,9 @@ namespace ClientsWebApi.Controllers
         [SwaggerOperation(
             Summary = "Allows to get all the specified user's contracts",
             Description = "Requires manager or admin privileges",
-            OperationId = "ManagerListContracts"
+            OperationId = "ManagerListClientContracts"
         )]
-        public IActionResult ListContracts(int clientId)
+        public IActionResult ListClientContracts(int clientId)
         {
             var contracts = _dbContext.Contracts
                                       .AsNoTracking()
@@ -397,5 +397,21 @@ namespace ClientsWebApi.Controllers
             return await this.GetDbSaveResultAsync(_dbContext);
         }
 
+
+        [HttpGet("contracts")]
+        [Produces(typeof(IEnumerable<ContractGetDto>))]
+        [SwaggerOperation(
+            Summary = "Allows to get all the contracts",
+            Description = "Requires manager or admin privileges",
+            OperationId = "ManagerListAllContracts"
+        )]
+        public IActionResult ListAllContracts()
+        {
+            var contracts = _dbContext.Contracts
+                                      .AsNoTracking()
+                                      .Select(contract => new ContractGetDto(contract));
+
+            return Ok(contracts);
+        }
     }
 }
